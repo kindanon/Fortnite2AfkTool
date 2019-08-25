@@ -1,88 +1,78 @@
 from pynput.mouse import Button, Controller as m_cont
 from pynput.keyboard import Key, Controller as k_cont
-
-import cv2  
-import numpy
-
 from PIL import ImageGrab, Image
 import time
 
 mouse = m_cont()
 keyboard = k_cont()
+hc = (1600,950)
+bc = (1635,325)
+ec = (235,95)
+ic = (476,882)
+mc = (615,882)
+sc = (500,755)
 
-playi = cv2.imread("fnt_play.png")
-busi = cv2.imread("fnt_drop.png")
-exiti = cv2.imread("fnt_leave.png")
-
-
-def main():
-#	load_assets()
-	home()
-	#TODO
+while True:
+	#start infinite loop
+	time.sleep(3)
 	
+	#hide from afk timer
+	keyboard.press(Key.ctrl)
+	time.sleep(.5)
+	keyboard.release(Key.ctrl)
 	
-def scanner(template):
-	scr_img = scr_cap()
-	cv_img = cv_pil(scr_img)
-	scan(cv_img, template)
+	#take screenshot	
+	img = ImageGrab.grab(bbox = (0,0,1920,1080))
 	
-def scr_cap():
-	return ImageGrab.grab(bbox = None)
-
-def cv_pil(scr_img):
-	cv_img = numpy.array(scr_img)
-	return cv_img[:, :, ::-1].copy() 	
+	#get pixels from image
+	home = img.getpixel(hc)
+	bus = img.getpixel(bc)
+	end = img.getpixel(ec)
+	item = img.getpixel(ic)
+	items = img.getpixel(mc)
+	survey = img.getpixel(sc)
 	
-def scan(cv_img, template):
-	result = cv2.matchTemplate(cv_img,template,cv2.TM_SQDIFF_NORMED) 
-	min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-	
-	if numpy.subtract((max_loc),(min_loc)) is None:
-		
-		print("i am none\n")
-		
-		return (0,0)
-	else:
-		
-		print(numpy.subtract((max_loc),(min_loc)))
-		
-		return numpy.subtract((max_loc),(min_loc))
-	
-def sleep(i):
-	time.sleep(i)
-
-#def load_assets():
-#	playi = cv2.imread("fnt_play.png")
-#	busi = cv2.imread("fnt_drop.png")
-#	exiti = cv2.imread("fnt_leave.png")
-	
-
-
-def home():
-	xy = scanner(playi)
-	if xy != (0,0):
-		mouse.position = xy
+	#if on home
+	if home == (245,  231, 72):
+		mouse.position = hc
 		mouse.click(Button.left, 1)
-	sleep(2)
-	home()
+		time.sleep(.5)
+		mouse.position = (0,0)
 	
+	#if end game
+	elif end == (255,  0, 22):
+		mouse.position = (1820,1050)
+		mouse.click(Button.left, 1)	
+		time.sleep(.5)
+		mouse.position = (0,0)
 	
-def bus():
-	xy = scanner(busi)
-	keyboard.press(' ')
-	keyboard.re(' ')
-	sleep(3)
+	#if items
+	elif item == (255,  255, 255):
+		mouse.position = ic
+		mouse.click(Button.left, 1)	
+		time.sleep(.5)
+		mouse.position = (0,0)
+		
+	elif items == (255,  255, 255):
+		mouse.position = mc
+		mouse.click(Button.left, 1)	
+		time.sleep(.5)
+		mouse.position = (0,0)	
 	
-def exit():
-	xy = scanner(exiti)
-	mouse.position = xy
-	mouse.click(Button.left, 1)	
-	
-def item():
-	item()
-	#TODO
-	
-	
-	
-if __name__ == "__main__":
-	main()
+	#if survey
+	elif survey == (157,195,255):
+		mouse.position = sc
+		mouse.click(Button.left, 1)	
+		time.sleep(.5)
+		mouse.position = (0,0)
+	#if on bus
+	elif bus == (101,  159, 55):
+		time.sleep(20)
+		keyboard.press(' ')
+		time.sleep(.5)
+		keyboard.release(' ') 
+		time.sleep(.5)
+		keyboard.press(' ')
+		time.sleep(.5)
+		keyboard.release(' ') 
+		time.sleep(120)	 
