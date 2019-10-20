@@ -4,6 +4,11 @@ import win32con
 import time
 from PIL import ImageGrab, Image
 
+#temporary mouse controller
+from pynput.mouse import Button, Controller as m_cont
+mouse = m_cont()
+#-------------
+
 hwnd = win32gui.FindWindow("UnrealWindow", None) #find by class
 
 #RGB CONSTANTS
@@ -12,7 +17,7 @@ bus_rgb = (101,159,55)
 #-------------
 
 while(1):
-    time.sleep(1) #wait for loop
+    time.sleep(3) #wait for loop
 
     #get window location + frame
     coords = win32gui.GetWindowRect(hwnd)
@@ -28,7 +33,7 @@ while(1):
     #--------------
 
     #simulate click for tab in 
-    #win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, tabinParam)
+    #win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, 0, tabinParam)
     #time.sleep(.1)
     #win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, tabinParam)
     #--------------
@@ -46,11 +51,16 @@ while(1):
         time.sleep(120)
     #--------------
 
+    #temporary mouse click function
+    tempReady = (int((coords[2]*.87844)), int((coords[3]*.63763)))
+    mouse.position = tempReady
+    mouse.click(Button.left, 1)
+    time.sleep(15)
+    #-------------
+
     #mouse click function
-    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, fillParam)
-    win32gui.SendMessage(hwnd, win32con.WM_KEYDOWN, win32con.VK_LBUTTON, 0)
-    win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, fillParam)
-    win32gui.SendMessage(hwnd, win32con.WM_KEYUP, win32con.VK_LBUTTON, 0)
+    #win32gui.SendMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, fillParam)
+    #win32gui.SendMessage(hwnd, win32con.WM_LBUTTONUP, 0, fillParam)
     #--------------
 
 #old info
